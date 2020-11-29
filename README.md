@@ -1,2 +1,2 @@
 # upp
-upravljanje_poslovnim_procesima
+upravljanje poslovnim_procesima
