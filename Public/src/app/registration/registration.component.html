@@ -1,0 +1,132 @@
+<div class="jumbotron text-center">
+    <h1>Projekat iz UPP</h1>
+    <p>Java Spring Boot 3 + Angular 11 + Camunda</p> 
+</div>
+
+
+<div class="container" *ngIf="!isSuccessSave">
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>Unesite sve podatke</h3>
+        </div>
+        <div class="col-sm-12">
+            <form *ngIf="isBasic">
+                <div class="form-group" *ngFor="let item of forms.formFields; let i = index">
+                    <label 
+                        for="{{item.label}}"
+                        class="w-100"
+                        *ngIf="item.typeName !== 'multipleEnum_genres' && item.typeName !== 'boolean'">
+                        {{item.label}}
+                    </label>
+            
+                    <input 
+                        *ngIf="item.typeName !== 'enum' && item.typeName !== 'boolean' && item.typeName !== 'multipleEnum_genres'" 
+                        type="{{item.id}}" 
+                        class="form-control" 
+                        name="{{item.id}}"
+                        id="{{item.id}}" 
+                        [(ngModel)]="forms.formFields[i].value.value"
+                        [ngModelOptions]="{standalone: true}" 
+                        placeholder="{{item.label}}"
+                    >
+
+                    <div *ngIf="item.typeName === 'boolean'">
+                        <label for="{{item.label}}" class="w-100">{{item.label}}</label>
+                        <select 
+                            class="form-control"
+                            name="{{item.id}}"
+                            id="{{item.id}}" 
+                            [(ngModel)]="forms.formFields[i].value.value"
+                            (ngModelChange)="isShow = forms.formFields[i].value.value">
+                            <option *ngFor="let i of item.type.values" value="{{i.type}}" >
+                                {{i.id}}
+                            </option>
+                        </select>
+                    </div>
+                    
+            
+                    <div *ngIf="item.typeName === 'multipleEnum_genres' && isShow">
+                        <label for="{{item.label}}" class="w-100">{{item.label}}</label>
+                        <select 
+                            class="form-control button-position" 
+                            name="{{item.id}}"
+                            id="{{item.id}}" 
+                            style="margin-bottom: 5px;"
+                            [(ngModel)]="forms.formFields[i].value.value" >
+                            <option>Odaberite jedan zanr</option>
+                            <option *ngFor="let i of item.type.values" value="{{i.id}}">
+                              {{i.name + ' - ' + i.vin}}
+                            </option>
+                        </select>
+                        <button class="btn btn-success position" data-toggle="modal" data-target="#myModal">+</button>
+                    </div>
+                    
+                </div>
+                
+                <button type="submit" class="btn btn-primary margin-top float-right w-25" (click)="ngRegistration()">Next -></button>
+            </form>
+
+            <form *ngIf="!isBasic">
+                <div class="form-group" *ngFor="let item of forms.formFields; let i = index">
+            
+                    <div *ngIf="item.typeName === 'multipleEnum_genres' && isShow">
+                        <label for="{{item.label}}" class="w-100">{{item.label}}</label>
+                        <select 
+                            class="form-control button-position" 
+                            name="{{item.id}}"
+                            id="{{item.id}}" 
+                            style="margin-bottom: 5px;"
+                            [(ngModel)]="forms.formFields[i].value.value" >
+                            <option>Odaberite jedan zanr</option>
+                            <option *ngFor="let i of item.type.values" value="{{i.id}}">
+                              {{i.name + ' - ' + i.vin}}
+                            </option>
+                        </select>
+                        <button class="btn btn-success position" data-toggle="modal" data-target="#myModal">+</button>
+                    </div>
+                    
+                </div>
+                
+                <button type="submit" class="btn btn-primary margin-top float-right w-25" (click)="ngGenresRegistration()">Next -></button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container" *ngIf="isSuccessSave">
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>Uspjesno ste se registrovani</h3>
+            <p>Ostaje vam jos da potvrdite nalog. Provjerite vasu postu!</p>
+            <a [routerLink]="['/']" class="btn btn-primary mr-1">Na pocetnu</a>
+            <a href="mailto:some@email.com" target="_blank" class="btn btn-success">Proverite postu</a>
+        </div>
+    </div>
+</div>
+
+<!-- The Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Dodajte novi zanr</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+            <input type="text" class="form-control" name="genre" id="genre" [(ngModel)]="newGenres" placeholder="New genres..."
+        >
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Odustati</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal" (click)="ngSaveGenre()">Sacuvati</button>
+        </div>
+        
+      </div>
+    </div>
+</div>

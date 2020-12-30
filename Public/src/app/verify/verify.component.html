@@ -1,0 +1,18 @@
+<div class="jumbotron text-center">
+    <h1>Projekat iz UPP</h1>
+    <p>Java Spring Boot 3 + Angular 11 + Camunda</p> 
+</div>
+
+
+<div class="container" >
+    <div class="row" >
+        <div class="col-sm-12" *ngIf="!isStatusVerify">
+            <h3 class="float-left">Verifikacija u toku </h3> <div class="spinner-border"></div>
+        </div>
+        <div class="col-sm-12" *ngIf="isStatusVerify">
+            <h3>Verifikovali ste vas profil</h3>
+            <p>Sada mozete da se ulogujete pratite, pratite link...</p>
+            <a type="button" class="btn btn-light" [routerLink]="['/login']"><h3>Uloguj se</h3></a>
+        </div>
+    </div>
+</div>
