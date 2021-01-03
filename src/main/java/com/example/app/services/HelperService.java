@@ -36,28 +36,17 @@ public class HelperService {
 	private RuntimeService runtimeService;
 
 	@Autowired
-	private RepositoryService repositoryService;
-
-	@Autowired
 	TaskService taskService;
 
 	@Autowired
 	FormService formService;
 
-	/**
-	 * Metoda koja je nativna i omogucava da svi procesi kroz nju prodju tako sto
-	 * proslijedimo id procesa i on na osnovu njega nadje proces i iscita podatke
-	 * 
-	 * @param typeProces
-	 * @return ResponderHendlerDTO
-	 */
 	public Object getForms(String idProces) {
 		ResponderHendlerDTO respons;
 		try {
 			ProcessInstance pi = runtimeService.startProcessInstanceByKey(idProces);
 
 			Task task = taskService.createTaskQuery().processInstanceId(pi.getId()).list().get(0);
-
 			TaskFormData tfd = formService.getTaskFormData(task.getId());
 
 			List<FormField> properties = tfd.getFormFields();
@@ -65,7 +54,7 @@ public class HelperService {
 			FormFieldsDto formFieldsDto = new FormFieldsDto(task.getId(), pi.getId(), properties);
 
 			respons = new ResponderHendlerDTO(200, formFieldsDto);
-			logger.info("End method getForms()");
+			logger.info("Number of the form field = [%s]", properties.size());
 			return respons;
 		} catch (Exception e) {
 
@@ -80,59 +69,57 @@ public class HelperService {
 		ResponderHendlerDTO respons;
 
 		HashMap<String, Object> map = this.mapListToDTO(formSubmissionDto);
-		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-		String processInstanceId = task.getProcessInstanceId();
-		runtimeService.setVariable(processInstanceId, "registration", map);
-		formService.submitTaskForm(taskId, map);
-		logger.info("End method save()");
-
-		respons = new ResponderHendlerDTO(200, "success");
+		
+		try {
+			Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+			String processInstanceId = task.getProcessInstanceId();
+			runtimeService.setVariable(processInstanceId, "registration", map);
+			formService.submitTaskForm(taskId, map);
+			respons = new ResponderHendlerDTO(200, "success");
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("lose");
+			respons = new ResponderHendlerDTO(200, "unsuccess");
+		}
+		
 		return respons;
 	}
 
 	public Object verify(TokenDTO tokenDTO) {
-
-		// runtimeService.setVariable(tokenDTO.getProcessId(), "VerifyUserToken", tokenDTO.getToken());
-
 		MessageCorrelationResult results = runtimeService.createMessageCorrelation("UserVerification")
 				.processInstanceId(tokenDTO.getProcessId()).correlateWithResult();
 
-		logger.info("Create Message Correlation: {" + results.getResultType().toString() + "}");
+		logger.info("Create Message Correlation: [%s]", results.getResultType().toString());
 
 		Task nextTask;
 		TaskFormData tfd = null;
-		Boolean response = false;
 		if (taskService.createTaskQuery().processInstanceId(tokenDTO.getProcessId()).list().size() != 0) {
-			// TODO Ovo prenjeti na neku drugu metodu pa ako dodje do loseg necega da moze
-			// ponovo da se iskorisi
-			logger.info("Start create Activation User Task");
+			logger.info("Start create new User Task.");
+
 			nextTask = taskService.createTaskQuery().processInstanceId(tokenDTO.getProcessId()).list().get(0);
 			tfd = formService.getTaskFormData(nextTask.getId());
-			logger.info("Finis create Activation User Task");
+
 			List<FormField> properties = tfd.getFormFields();
-			
-			response = this.updateIsActivUser(nextTask.getId(), properties, tokenDTO);
+			this.updateIsActivUser(nextTask.getId(), properties, tokenDTO);
+			logger.info("Finished create new User Task.");
 		}
-		
+
 		return new ResponderHendlerDTO(null, "success", 200);
 	}
-	
-	public Boolean updateIsActivUser(String taskId, List<FormField> properties, TokenDTO tokenDTO) {
-		logger.info("Start last task, Activation User");
+
+	private Boolean updateIsActivUser(String taskId, List<FormField> properties, TokenDTO tokenDTO) {
 		FormSubmissionDto fsd = new FormSubmissionDto();
 		fsd.setFieldId("token");
 		fsd.setFieldValue(tokenDTO.getToken());
-		
+
 		List<FormSubmissionDto> fssd = new ArrayList<FormSubmissionDto>();
 		fssd.add(fsd);
-		
+
 		HashMap<String, Object> map = this.mapListToDTO(fssd);
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
 		String processInstanceId = task.getProcessInstanceId();
 		runtimeService.setVariable(processInstanceId, "activationUser", map);
 		formService.submitTaskForm(taskId, map);
-		logger.info("Finis Activation User");
-
 		return true;
 	}
 

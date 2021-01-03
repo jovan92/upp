@@ -15,18 +15,17 @@ import org.springframework.stereotype.Service;
 public class MailServiceImpl {
 
 	Logger logger = LogManager.getLogger(MailServiceImpl.class);
-	
+
 	@Autowired
 	private final JavaMailSender senderMail;
-	
+
 	public MailServiceImpl(JavaMailSender sender) {
 		this.senderMail = sender;
 	}
-	
+
 	@Async("emailExecutor")
 	public void sendMail(String subject, String text, String string) {
 		// TODO Auto-generated method stub
-		
 		MimeMessagePreparator message = newMessage -> {
 			newMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(string));
 			newMessage.setFrom("${spring.mail.username}");
@@ -34,7 +33,7 @@ public class MailServiceImpl {
 			newMessage.setText(text);
 		};
 		senderMail.send(message);
-		
+
 	}
 
 }

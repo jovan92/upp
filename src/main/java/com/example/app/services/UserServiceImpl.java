@@ -29,6 +29,10 @@ public class UserServiceImpl {
 		// TODO Auto-generated method stub
 		userRepository.save(user);
 	}
-	
-	
+
+	public boolean checkUsername(String username) {
+		User user = userRepository.findByUsername(username);
+		return user == null;
+	}
+
 }
