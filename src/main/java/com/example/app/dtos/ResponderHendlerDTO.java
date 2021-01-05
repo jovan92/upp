@@ -6,6 +6,7 @@ public class ResponderHendlerDTO {
 	private String type;
 	private int status;
 	private FormFieldsDto formFieldsDto;
+	private LoginResponseDTO loginResponseDTO;
 
 	public ResponderHendlerDTO() {
 		super();
@@ -18,26 +19,41 @@ public class ResponderHendlerDTO {
 		this.type = type;
 		this.status = status;
 	}
-	
+
 	public ResponderHendlerDTO(int status, FormFieldsDto formFieldsDto) {
 		super();
 		this.status = status;
-		if (formFieldsDto != null) this.formFieldsDto = formFieldsDto;
+		if (formFieldsDto != null)
+			this.formFieldsDto = formFieldsDto;
 	}
-	
+
 	public ResponderHendlerDTO(int status, FormFieldsDto formFieldsDto, String type) {
 		super();
 		this.status = status;
-		if (formFieldsDto != null) this.formFieldsDto = formFieldsDto;
+		if (formFieldsDto != null)
+			this.formFieldsDto = formFieldsDto;
 		this.type = type;
 	}
-	
+
 	public ResponderHendlerDTO(int status, String type) {
 		super();
 		this.status = status;
 		this.type = type;
 	}
 
+	/**
+	 * Create login response
+	 * @param status
+	 * @param type
+	 * @param jwt
+	 * @param userDTO
+	 */
+	public ResponderHendlerDTO(int status, String type, String jwt, UserDTO userDTO) {
+		super();
+		this.status = status;
+		this.type = type;
+		this.loginResponseDTO = new LoginResponseDTO(jwt, userDTO);
+	}
 
 	public Exception getE() {
 		return e;
@@ -69,6 +85,14 @@ public class ResponderHendlerDTO {
 
 	public void setFormFieldsDto(FormFieldsDto formFieldsDto) {
 		this.formFieldsDto = formFieldsDto;
+	}
+
+	public LoginResponseDTO getLoginResponseDTO() {
+		return loginResponseDTO;
+	}
+
+	public void setLoginResponseDTO(LoginResponseDTO loginResponseDTO) {
+		this.loginResponseDTO = loginResponseDTO;
 	}
 
 }

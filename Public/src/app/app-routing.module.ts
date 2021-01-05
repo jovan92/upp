@@ -1,17 +1,19 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { HomeComponent } from './home/home.component';
-import { Page404Component } from './page404/page404.component';
-import { LoginComponent } from './login/login.component';
-import { RegistrationComponent } from './registration/registration.component';
-import { VerifyComponent } from './verify/verify.component';
+import { Page404Component } from './components/page404/page404.component';
+import { HomeComponent } from './components/home/home.component';
+import { RegistrationComponent } from './components/auth/registration/registration.component';
+import { VerifyComponent } from './components/auth/verify/verify.component';
+import { LoginComponent } from './components/auth/login/login.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent},
-  { path: 'login', component: Page404Component},
+  { path: 'login', component: LoginComponent},
   { path: 'registrate', component: RegistrationComponent},
-  { path: 'verify/:token/:processId', component: VerifyComponent}
+  { path: 'verify/:token/:processId', component: VerifyComponent},
+  //{ path: 'home', component: Page404Component, canActivate: [AuthGuard] }
+  { path: 'home', component: Page404Component }
 ];
 
 @NgModule({

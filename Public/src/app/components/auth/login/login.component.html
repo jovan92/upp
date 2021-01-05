@@ -1,0 +1,26 @@
+<div class="jumbotron text-center">
+    <h1>Projekat iz UPP</h1>
+    <p>Java Spring Boot 3 + Angular 11 + Camunda</p> 
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>Ulogijte se</h3>
+        </div>
+        <div class="col-sm-12">
+            <form>
+                <div class="form-group">
+                    <label for="username"class="w-100">Username</label>
+                    <input type="text" class="form-control" name="username"id="username" [(ngModel)]="loginForm.usernameOrEmail" placeholder="Input username or email">
+
+                    <label for="password"class="w-100">Password</label>
+                    <input type="password" class="form-control" name="password" id="password" [(ngModel)]="loginForm.password" placeholder="Input password">
+                </div>
+                
+                <button type="submit" class="btn btn-primary margin-top float-right w-25" (click)="ngLogin()">Login</button>
+            </form>
+        </div>
+    </div>
+</div>

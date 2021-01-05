@@ -35,3 +35,8 @@ export class FormFields {
 export class Genres {
     formFields: [FormFields]
 }
+
+export class LoginDTO {
+    usernameOrEmail: String
+    password: String;
+}

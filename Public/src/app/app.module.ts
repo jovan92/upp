@@ -5,12 +5,12 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
-import { Page404Component } from './page404/page404.component';
-import { HomeComponent } from './home/home.component';
-import { RegistrationComponent } from './registration/registration.component';
-import { VerifyComponent } from './verify/verify.component';
-import { SendMailComponent } from './send-mail/send-mail.component';
+import { LoginComponent } from './components/auth/login/login.component';
+import { Page404Component } from './components/page404/page404.component';
+import { HomeComponent } from './components/home/home.component';
+import { RegistrationComponent } from './components/auth/registration/registration.component';
+import { VerifyComponent } from './components/auth/verify/verify.component';
+import { SendMailComponent } from './components/auth/send-mail/send-mail.component';
 
 @NgModule({
   declarations: [

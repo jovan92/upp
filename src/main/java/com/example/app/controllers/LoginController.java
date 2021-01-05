@@ -1,7 +1,8 @@
 package com.example.app.controllers;
 
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class LoginController {
 		logger.info("Start login user.");
 
 		Object response = loginService.login(loginDTO);
-		logger.info("Finished login user = [].");
+		logger.info("Finished login user = [" + "tests" + "].");
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

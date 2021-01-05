@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+@SuppressWarnings("serial")
 @Entity
 public class User {
 
@@ -32,7 +33,7 @@ public class User {
 	 * 
 	 * @OnDelete(action = OnDeleteAction.CASCADE) private Address address;
 	 */
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 	private List<Roles> roles = new ArrayList<Roles>();
 

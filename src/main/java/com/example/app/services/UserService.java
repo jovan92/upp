@@ -11,6 +11,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.identity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.app.models.Roles;
@@ -36,6 +37,7 @@ public class UserService implements JavaDelegate {
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
 		logger.info("Stared UserService");
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		HashMap<String, Object> userForms = (HashMap<String, Object>) execution.getVariable("registration");
 		Boolean isBeta = Boolean.parseBoolean(userForms.get("isBeta").toString());
 		logger.info("Beta user is: " + isBeta);
@@ -47,7 +49,7 @@ public class UserService implements JavaDelegate {
 
 		com.example.app.models.User newUser = new com.example.app.models.User(userForms.get("firstName").toString(),
 				userForms.get("lastName").toString(), userForms.get("username").toString(),
-				userForms.get("password").toString(), isBeta, role, userForms.get("email").toString(), token);
+				encoder.encode(userForms.get("password").toString()), isBeta, role, userForms.get("email").toString(), token);
 
 		logger.info(newUser);
 

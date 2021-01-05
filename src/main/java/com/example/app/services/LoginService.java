@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import com.example.app.dtos.LoginDTO;
+import com.example.app.dtos.ResponderHendlerDTO;
+import com.example.app.dtos.UserDTO;
 import com.example.app.models.User;
 import com.example.app.repositories.UserRepository;
 import com.example.app.security.TokenUtils;
@@ -32,22 +34,25 @@ public class LoginService {
 	@Autowired
 	private TokenUtils tokenUtils;
 
-	public Object login(LoginDTO loginDTO) {
+	@SuppressWarnings("unused")
+	public ResponderHendlerDTO login(LoginDTO loginDTO) {
 		// TODO Auto-generated method stub
-		Map<String, Object> map = new HashMap<String, Object>();
+		
+		System.out.println(loginDTO.getUsernameOrEmail());
 
 		User user = userRepository.findByUsername(loginDTO.getUsernameOrEmail());
+
 		if (user == null) {
 			User user1 = userRepository.findByEmail(loginDTO.getUsernameOrEmail());
 			if (user1 == null) {
-				return false;
+				return new ResponderHendlerDTO(null, "userNotFound", 404);
 			} else {
 				user = user1;
 			}
 		}
 
 		if (!user.getIsAcive()) {
-			return false;
+			return new ResponderHendlerDTO(null, "userNotActive", 500);
 		}
 
 		try {
@@ -58,18 +63,14 @@ public class LoginService {
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
 			UserDetails details = userDetailsService.loadUserByUsername(user.getUsername());
+			
+			UserDTO userDTO = new UserDTO(user);
 
-			map.put("jwt", tokenUtils.generateToken(details));
-			map.put("user", user);
-
-			return map;
+			return new ResponderHendlerDTO(200, "login", tokenUtils.generateToken(details), userDTO);
 		} catch (Exception e) {
 			// TODO: handle exception
-			map.put("error", "User is not login");
-			map.put("user", null);
-			return map;
+			return new ResponderHendlerDTO(e, "userNotFound", 404);
 		}
-
 	}
 
 }
