@@ -8,7 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.form.FormField;
@@ -54,7 +53,7 @@ public class HelperService {
 			FormFieldsDto formFieldsDto = new FormFieldsDto(task.getId(), pi.getId(), properties);
 
 			respons = new ResponderHendlerDTO(200, formFieldsDto);
-			logger.info("Number of the form field = [%s]", properties.size());
+			logger.info("Number of the form field = [" + properties.size() + "]");
 			return respons;
 		} catch (Exception e) {
 

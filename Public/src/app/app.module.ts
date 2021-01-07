@@ -11,6 +11,7 @@ import { HomeComponent } from './components/home/home.component';
 import { RegistrationComponent } from './components/auth/registration/registration.component';
 import { VerifyComponent } from './components/auth/verify/verify.component';
 import { SendMailComponent } from './components/auth/send-mail/send-mail.component';
+import { RegistrationWriterComponent } from './components/auth/registration-writer/registration-writer.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { SendMailComponent } from './components/auth/send-mail/send-mail.compone
     HomeComponent,
     RegistrationComponent,
     VerifyComponent,
-    SendMailComponent
+    SendMailComponent,
+    RegistrationWriterComponent
   ],
   imports: [
     BrowserModule,

@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import {  HttpClient } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
-import { normalizeGenFileSuffix } from '@angular/compiler/src/aot/util';
-import { generate } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

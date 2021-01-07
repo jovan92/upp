@@ -6,12 +6,16 @@
   
 <div class="container">
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             <a type="button" class="btn btn-light" [routerLink]="['/login']"><h3>Uloguj se</h3></a>
             <p>Ukoliko imate kreiran nalog ulogujte se.</p>
         </div>
-        <div class="col-sm-6">
-            <a type="button" class="btn btn-light" [routerLink]="['/registrate']"><h3>Registruj se</h3></a>
+        <div class="col-sm-4">
+            <a type="button" class="btn btn-light" [routerLink]="['/registrate']"><h3>Registruj se kao citalac</h3></a>
+            <p>Ukoliko niste jos registrovani to mozete uraditi sad.</p>
+        </div>
+        <div class="col-sm-4">
+            <a type="button" class="btn btn-light" [routerLink]="['/registrateWriter']"><h3>Registruj se kao pisac</h3></a>
             <p>Ukoliko niste jos registrovani to mozete uraditi sad.</p>
         </div>
     </div>
