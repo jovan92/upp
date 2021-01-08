@@ -68,6 +68,8 @@ public class Application {
 		roleRepository.save(newRole1);
 		Roles newRole2 = new Roles("BETAREADER");
 		roleRepository.save(newRole2);
+		Roles newRole3 = new Roles("WRITER");
+		roleRepository.save(newRole3);
 		
 		User user = identityService.newUser("nole");
 		user.setPassword("nole");

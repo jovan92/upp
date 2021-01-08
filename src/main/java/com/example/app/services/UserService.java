@@ -37,12 +37,27 @@ public class UserService implements JavaDelegate {
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
 		logger.info("Stared UserService");
+		
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		HashMap<String, Object> userForms = (HashMap<String, Object>) execution.getVariable("registration");
-		Boolean isBeta = Boolean.parseBoolean(userForms.get("isBeta").toString());
-		logger.info("Beta user is: " + isBeta);
-
-		String getRole = isBeta ? "BETAREADER" : "READER";
+		
+		String getRole = "";
+		Boolean isBeta = false;
+		try {
+			Boolean isWriter = Boolean.parseBoolean(userForms.get("writer").toString());
+			
+			if (!isWriter) {
+				getRole = "UNDEFINDE";
+			} else {
+				getRole = "WRITER";
+			}
+		} catch(Exception e) {
+			isBeta = Boolean.parseBoolean(userForms.get("isBeta").toString());
+			getRole = isBeta ? "BETAREADER" : "READER";
+		}
+		
+		logger.info("Role is " + getRole);
+		
 		List<Roles> role = roleRepository.findByName(getRole);
 
 		String token = UUID.randomUUID().toString();
@@ -58,7 +73,6 @@ public class UserService implements JavaDelegate {
 			execution.setVariable("isValid", true);
 		} catch (Exception e) {
 			execution.setVariable("isValid", false);
-			//TODO Kreirati SocketIO istancu
 			throw new Exception("Something went wrong");
 		}
 
@@ -71,8 +85,8 @@ public class UserService implements JavaDelegate {
 		execution.setVariable("email", newUser.getEmail());
 		execution.setVariable("verificationToken", token);
 
-		logger.info("UserService is finished, set mail {" + newUser.getEmail().toString()
-				+ "} and set verificationToken {" + token.toString() + "}");
+		logger.info("UserService is finished, set mail [ " + newUser.getEmail().toString()
+				+ " ] and set verificationToken [ " + token.toString() + " ]");
 	}
 
 }
