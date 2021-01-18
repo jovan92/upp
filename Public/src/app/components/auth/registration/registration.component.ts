@@ -15,16 +15,18 @@ export class RegistrationComponent implements OnInit {
   forms: Login;
   multiple: any;
   genres: any;
-  isShow: Boolean;
-  isModal: Boolean;
+  formGenres: any;
   newGenres: any;
   isBasic: Boolean;
-  formGenres: any;
+  isShow: Boolean;
+  isModal: Boolean;
   isSuccessSave: Boolean;
+  isSpiner: Boolean;
   constructor(private registrationService : RegistrationService, private router : Router) {
     this.isModal = false;
     this.isBasic = true;
     this.isSuccessSave = false;
+    this.isSpiner = true;
   }
 
   ngOnInit(): void {
@@ -70,7 +72,7 @@ export class RegistrationComponent implements OnInit {
       createResponse.push({fieldId: key, fieldValue: value});
     })
 
-    console.log(this.forms.processInstanceId)
+    this.isSuccessSave = true;
     this.registrationService.save(createResponse, this.forms.taskId, this.forms.processInstanceId, 'basic')
       .subscribe(res => {
         if (res !== null && res !== true) {
@@ -84,6 +86,7 @@ export class RegistrationComponent implements OnInit {
           this.isBasic = false;
         }
         if (res === true) {
+          window.alert('Uspjesno ste se registrovali! Provjerite vas mejl!!!')
           this.router.navigate(['/']);
         }
       })

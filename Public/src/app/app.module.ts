@@ -12,6 +12,9 @@ import { RegistrationComponent } from './components/auth/registration/registrati
 import { VerifyComponent } from './components/auth/verify/verify.component';
 import { SendMailComponent } from './components/auth/send-mail/send-mail.component';
 import { RegistrationWriterComponent } from './components/auth/registration-writer/registration-writer.component';
+import { UserHomeComponent } from './components/auth-user/user-home/user-home.component';
+import { HeaderComponent } from './components/auth-user/header/header.component';
+import { MeniComponent } from './components/auth-user/meni/meni.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +25,10 @@ import { RegistrationWriterComponent } from './components/auth/registration-writ
     RegistrationComponent,
     VerifyComponent,
     SendMailComponent,
-    RegistrationWriterComponent
+    RegistrationWriterComponent,
+    UserHomeComponent,
+    HeaderComponent,
+    MeniComponent,
   ],
   imports: [
     BrowserModule,

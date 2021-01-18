@@ -1,0 +1,24 @@
+.container1 {
+    height: 100vh;
+    width: 100vw;
+    float: left;
+}
+
+.container2 {
+    height: calc(100% - 230px);
+    float: left;
+    width: 100%;
+}
+
+.container2-main {
+    float: left;
+    border-right: 1px solid #ccc;
+    width: 200px;
+    height: 100%;
+}
+
+.container2-body {
+    float: left;
+    width: calc(100% - 200px);
+    height: 100%;
+}

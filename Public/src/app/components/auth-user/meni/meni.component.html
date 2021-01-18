@@ -1,0 +1,12 @@
+<div class="w-100 menu">
+    <h3>Meni</h3>
+</div>
+
+<div>
+    <button type="button" class="btn btn-light" (click)="openTab('allBooks')" [ngClass]="{'activeTubClass' : activeTub === 'allBooks'}">Sve knjige</button>
+    <button type="button" class="btn btn-light" (click)="openTab('favoriteBook')" [ngClass]="{'activeTubClass' : activeTub === 'favoriteBook'}">Omiljene knjige</button>
+    <button type="button" class="btn btn-light" (click)="openTab('addBooks')" [ngClass]="{'activeTubClass' : activeTub === 'addBooks'}">Dodati knjige</button>
+    <button type="button" class="btn btn-light" (click)="openTab('evaluateBooks')" [ngClass]="{'activeTubClass' : activeTub === 'evaluateBooks'}">Oceniti knjige</button>
+    <button type="button" class="btn btn-light">Jos nesto</button>
+    <button type="button" class="btn btn-light">Jos nesto</button>
+</div>

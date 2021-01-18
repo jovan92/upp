@@ -93,15 +93,15 @@
     </div>
 </div>
 
-<div class="container" *ngIf="isSuccessSave">
-    <div class="row">
-        <div class="col-sm-12">
-            <h3>Uspjesno ste se registrovani</h3>
-            <p>Ostaje vam jos da potvrdite nalog. Provjerite vasu postu!</p>
-            <a [routerLink]="['/']" class="btn btn-primary mr-1">Na pocetnu</a>
-            <a href="mailto:some@email.com" target="_blank" class="btn btn-success">Proverite postu</a>
-        </div>
+
+
+<div class="spiner" *ngIf="isSuccessSave">
+    <div class="tekst-center">
+        <p>Podaci se obradjuju</p>
     </div>
+    <div class="spiner-center">
+        <div class="spinner-border text-success"></div> 
+    </div>     
 </div>
 
 <!-- The Modal -->

@@ -7,6 +7,8 @@ import { RegistrationComponent } from './components/auth/registration/registrati
 import { VerifyComponent } from './components/auth/verify/verify.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegistrationWriterComponent } from './components/auth/registration-writer/registration-writer.component';
+import { UserHomeComponent } from './components/auth-user/user-home/user-home.component';
+
 
 const routes: Routes = [
   { path: '', component: HomeComponent},
@@ -14,7 +16,7 @@ const routes: Routes = [
   { path: 'registrate', component: RegistrationComponent},
   { path: 'registrateWriter', component: RegistrationWriterComponent },
   { path: 'verify/:token/:processId', component: VerifyComponent},
-  { path: 'home', component: Page404Component }
+  { path: 'home', component: UserHomeComponent }
 ];
 
 @NgModule({
