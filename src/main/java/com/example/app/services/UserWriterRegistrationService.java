@@ -9,4 +9,10 @@ public class UserWriterRegistrationService {
 		return null;
 	}
 
+	public Object saveFiles() {
+		// TODO Auto-generated method stub
+		
+		return null;
+	}
+
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.app.dtos.FormSubmissionDto;
 import com.example.app.services.HelperService;
+import com.example.app.services.UserWriterRegistrationService;
 
 @Controller
 @RequestMapping("/api/registrationWriter")
@@ -26,6 +27,9 @@ public class RegistrationWriterController {
 	
 	@Autowired
 	private HelperService helperService;
+	
+	@Autowired
+	private UserWriterRegistrationService userWriterRegistrationService;
 	
 	/**
 	 * Koristimo iz HelperService class istu metodu za sve forme. 
@@ -53,6 +57,17 @@ public class RegistrationWriterController {
 		logger.info("Start save new user in db");
 		
 		Object response = helperService.save(procesName, procesId, formSubmissionDto);
+		logger.info("Finished save new user in db");
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/saveFiles/{procesId}", method = RequestMethod.POST)
+	public ResponseEntity<Object> save(@PathVariable String procesId) {
+		logger.info("Start save files in folder.");
+		
+		// TODO Logika skidanja bajt koda koji nosi informaciju o fajlovima
+		// TODO Logika parsiranja bajta i slanja dalje
+		Object response = userWriterRegistrationService.saveFiles(); // prosljedjujemo taj bajt kod 
 		logger.info("Finished save new user in db");
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}

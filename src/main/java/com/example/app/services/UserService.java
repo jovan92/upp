@@ -84,6 +84,7 @@ public class UserService implements JavaDelegate {
 
 		execution.setVariable("email", newUser.getEmail());
 		execution.setVariable("verificationToken", token);
+		execution.setVariable("type", "userRegistration");
 
 		logger.info("UserService is finished, set mail [ " + newUser.getEmail().toString()
 				+ " ] and set verificationToken [ " + token.toString() + " ]");
