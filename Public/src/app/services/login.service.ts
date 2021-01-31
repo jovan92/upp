@@ -19,7 +19,9 @@ export class LoginService {
         if (res['type'] === 'login') {
           let token = res['loginResponseDTO']['token'];
           let user = res['loginResponseDTO']['userDTO'];
+          let role = res['loginResponseDTO']['roles'];
 
+          user['role'] = role;
           localStorage.setItem('token', JSON.stringify(token));
           localStorage.setItem('user', JSON.stringify(user));
           return true;

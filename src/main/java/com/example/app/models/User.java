@@ -14,25 +14,18 @@ public class User {
 	private Long id;
 	private String firstName;
 	private String lastName;
+
+	@Column(unique = true)
 	private String username;
 	private String password;
+
+	@Column(unique = true)
 	private String email;
 	private String hashCode;
 	private Boolean isBeta;
 	private Boolean isAcive = false;
+	private Boolean isWriter = false;
 
-	/*
-	 * @ManyToMany
-	 * 
-	 * @JoinTable(name = "user_genres", joinColumns = @JoinColumn(name = "user_id",
-	 * referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name =
-	 * "genres_id", referencedColumnName = "id")) private List<Genres> genres;
-	 */
-	/*
-	 * @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-	 * 
-	 * @OnDelete(action = OnDeleteAction.CASCADE) private Address address;
-	 */
 	@ManyToMany
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 	private List<Roles> roles = new ArrayList<Roles>();
@@ -133,6 +126,14 @@ public class User {
 
 	public void setHashCode(String hashCode) {
 		this.hashCode = hashCode;
+	}
+
+	public Boolean getIsWriter() {
+		return isWriter;
+	}
+
+	public void setIsWriter(Boolean isWriter) {
+		this.isWriter = isWriter;
 	}
 
 	@Override

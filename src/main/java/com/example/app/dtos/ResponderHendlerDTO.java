@@ -55,6 +55,14 @@ public class ResponderHendlerDTO {
 		this.loginResponseDTO = new LoginResponseDTO(jwt, userDTO);
 	}
 
+	public ResponderHendlerDTO(int status, String type, String jwt, UserDTO userDTO, String roles) {
+		// TODO Auto-generated constructor stub
+		super();
+		this.status = status;
+		this.type = type;
+		this.loginResponseDTO = new LoginResponseDTO(jwt, userDTO, roles);
+	}
+
 	public Exception getE() {
 		return e;
 	}

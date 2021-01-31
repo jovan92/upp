@@ -10,6 +10,7 @@ import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.runtime.MessageCorrelationResult;
@@ -39,6 +40,8 @@ public class HelperService {
 
 	@Autowired
 	FormService formService;
+	
+	DelegateExecution execution;
 
 	public Object getForms(String idProces) {
 		ResponderHendlerDTO respons;
@@ -77,19 +80,14 @@ public class HelperService {
 			respons = new ResponderHendlerDTO(200, "success");
 		} catch (Exception e) {
 			// TODO: handle exception
-			System.out.println("lose");
-			respons = new ResponderHendlerDTO(200, "unsuccess");
+			System.out.println("lose: " + e.toString());
+			respons = new ResponderHendlerDTO(200, "errorUsername");
 		}
 		
 		return respons;
 	}
 
 	public Object verify(TokenDTO tokenDTO) {
-		MessageCorrelationResult results = runtimeService.createMessageCorrelation("UserVerification")
-				.processInstanceId(tokenDTO.getProcessId()).correlateWithResult();
-
-		logger.info("Create Message Correlation: [%s]", results.getResultType().toString());
-
 		Task nextTask;
 		TaskFormData tfd = null;
 		if (taskService.createTaskQuery().processInstanceId(tokenDTO.getProcessId()).list().size() != 0) {

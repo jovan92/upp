@@ -19,7 +19,7 @@ public class EmailValidation implements FormFieldValidator {
 		} else {
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("isValidError", "mail");
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, map.toString(), null);
+			return false;
 		}
 	}
 }

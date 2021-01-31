@@ -11,8 +11,10 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.identity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.app.models.Roles;
 import com.example.app.repositories.RoleRepository;
@@ -71,23 +73,25 @@ public class UserService implements JavaDelegate {
 		try {
 			userServicImpl.save(newUser);
 			execution.setVariable("isValid", true);
+//			execution.jobExecutorActivate(true);
+			
+			User user = identityService.newUser(userForms.get("username").toString());
+			user.setPassword(userForms.get("password").toString());
+			user.setFirstName(userForms.get("firstName").toString());
+			user.setLastName(userForms.get("lastName").toString());
+			user.setEmail(userForms.get("email").toString());
+
+			execution.setVariable("email", newUser.getEmail());
+			execution.setVariable("verificationToken", token);
+			execution.setVariable("type", "userRegistration");
+
+			logger.info("UserService is finished, set mail [ " + newUser.getEmail().toString()
+					+ " ] and set verificationToken [ " + token.toString() + " ]");
 		} catch (Exception e) {
+			System.out.println(e.toString());
 			execution.setVariable("isValid", false);
-			throw new Exception("Something went wrong");
+			throw new ResponseStatusException(HttpStatus.OK, "Testiramo poruku!!");
 		}
-
-		User user = identityService.newUser(userForms.get("username").toString());
-		user.setPassword(userForms.get("password").toString());
-		user.setFirstName(userForms.get("firstName").toString());
-		user.setLastName(userForms.get("lastName").toString());
-		user.setEmail(userForms.get("email").toString());
-
-		execution.setVariable("email", newUser.getEmail());
-		execution.setVariable("verificationToken", token);
-		execution.setVariable("type", "userRegistration");
-
-		logger.info("UserService is finished, set mail [ " + newUser.getEmail().toString()
-				+ " ] and set verificationToken [ " + token.toString() + " ]");
 	}
 
 }

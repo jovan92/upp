@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,6 +15,9 @@ import { RegistrationWriterComponent } from './components/auth/registration-writ
 import { UserHomeComponent } from './components/auth-user/user-home/user-home.component';
 import { HeaderComponent } from './components/auth-user/header/header.component';
 import { MeniComponent } from './components/auth-user/meni/meni.component';
+
+
+import { HttpErrorInterceptorInterceptor } from './hendler/http-error-interceptor.interceptor';
 
 @NgModule({
   declarations: [
@@ -36,7 +39,9 @@ import { MeniComponent } from './components/auth-user/meni/meni.component';
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptorInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

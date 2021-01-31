@@ -25,6 +25,14 @@ export class RegistrationWriterService {
       }))
   }
 
+  getFormsFile() {
+    return this.http.get(this.host + 'registrationWriter/fileForms')
+      .pipe(map(res => {
+        console.log(res);
+        return res;
+      }))
+  }
+
   save(value: any, taskId: String, processInstanceId: String, type: String) {
     return this.http.post(this.host + 'registrationWriter/' + taskId, value)
       .pipe(map(res => {
@@ -35,7 +43,14 @@ export class RegistrationWriterService {
         if (res['type'] === 'success') {
           return true;
         }
+        if (res['type'] === 'errorUsername') {
+          return 'nevalja';
+        }
         return null;
       }))
+  }
+
+  handleError(error) {
+
   }
 }

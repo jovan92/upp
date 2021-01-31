@@ -34,5 +34,16 @@ public class UserServiceImpl {
 		User user = userRepository.findByUsername(username);
 		return user == null;
 	}
+	
+	public User findByEmail(String email) {
+		User user = userRepository.findByEmail(email);
+		return user;
+	}
 
+	public User delete(String email) {
+		User user = userRepository.findByEmail(email);
+		
+		userRepository.delete(user);
+		return user;
+	}
 }

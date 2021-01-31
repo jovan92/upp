@@ -3,11 +3,17 @@
 <div class="container1">
     <app-header></app-header>
 
-    <div class="container2">
+    <div class="container2" *ngIf="user.isWriter">
         <app-meni class="container2-main" [activeTub]='activeTub' (emit)="onEmitMenu($event)"></app-meni>
 
         <div class="container2-body">
             <p>Ovde ide sve ostalo</p>
+        </div>
+    </div>
+
+    <div class="container2" *ngIf="!user.isWriter">
+        <div class="container3-notregistration">
+            <h4>Molimo vas unesite minimum dva fajla kako bi mogli u potpunosti registrovati Vas profil.</h4>
         </div>
     </div>
 </div>

@@ -10,13 +10,15 @@ public class UserDTO {
 	private String username;
 	private String email;
 	private Boolean isBeta;
+	private Boolean isWriter;
 
 	public UserDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public UserDTO(Long id, String firstName, String lastName, String username, String email, Boolean isBeta) {
+	public UserDTO(Long id, String firstName, String lastName, String username, String email, Boolean isBeta,
+			Boolean isWriter) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -24,8 +26,9 @@ public class UserDTO {
 		this.username = username;
 		this.email = email;
 		this.isBeta = isBeta;
+		this.isWriter = isWriter;
 	}
-	
+
 	public UserDTO(User u) {
 		super();
 		this.id = u.getId();
@@ -34,6 +37,7 @@ public class UserDTO {
 		this.username = u.getUsername();
 		this.email = u.getEmail();
 		this.isBeta = u.getIsBeta();
+		this.isWriter = u.getIsWriter();
 	}
 
 	public Long getId() {
@@ -82,6 +86,14 @@ public class UserDTO {
 
 	public void setIsBeta(Boolean isBeta) {
 		this.isBeta = isBeta;
+	}
+
+	public Boolean getIsWriter() {
+		return isWriter;
+	}
+
+	public void setIsWriter(Boolean isWriter) {
+		this.isWriter = isWriter;
 	}
 
 }

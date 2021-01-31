@@ -13,4 +13,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	User findByHashCode(String hashCode);
 
 	User findByEmail(String email);
+
+	User deleteByEmail(String email);
 }

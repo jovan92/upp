@@ -3,13 +3,13 @@
     <p>Java Spring Boot 3 + Angular 11 + Camunda</p> 
 </div>
 
-<div class="container">
+<div class="container" *ngIf="!isSpiner">
     <div class="row">
         <div class="col-sm-12">
             <h3>Unesite sve podatke</h3>
         </div>
         <div class="col-sm-12">
-            <form>
+            <form #forms>
                 <div class="form-group" *ngFor="let item of registrationForms.formFields; let i = index">
                     <label 
                         for="{{item.label}}"
@@ -23,7 +23,8 @@
                         type="{{item.id}}" 
                         class="form-control" 
                         name="{{item.id}}"
-                        id="{{item.id}}" 
+                        [id]="item.id"
+                        (input)="checkInput(item.id)"
                         [(ngModel)]="registrationForms.formFields[i].value.value"
                         [ngModelOptions]="{standalone: true}" 
                         placeholder="{{item.label}}"
@@ -62,10 +63,19 @@
                     
                 </div>
                 
-                <button type="submit" class="btn btn-primary margin-top float-right w-25" (click)="ngRegistration()">Next -></button>
+                <button type="submit" class="btn btn-primary margin-top float-right w-25" (click)="ngRegistration()">Sacuvati</button>
             </form>
         </div>
     </div>
+</div>
+
+<div class="spiner" *ngIf="isSpiner">
+    <div class="tekst-center">
+        <p>Podaci se obradjuju</p>
+    </div>
+    <div class="spiner-center">
+        <div class="spinner-border text-success"></div> 
+    </div>     
 </div>
 
 <!-- The Modal -->
@@ -81,7 +91,7 @@
         
         <!-- Modal body -->
         <div class="modal-body">
-            <input type="text" class="form-control" name="genre" id="genre" [(ngModel)]="newGenres" placeholder="New genres..."
+            <input type="text" class="form-control" name="genre" id="genre" [(ngModel)]="newGenres" placeholder="Dodajte novi zanr..."
         >
         </div>
         

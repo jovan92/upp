@@ -1,5 +1,7 @@
 package com.example.app.services;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,8 +40,6 @@ public class LoginService {
 	public ResponderHendlerDTO login(LoginDTO loginDTO) {
 		// TODO Auto-generated method stub
 		
-		System.out.println(loginDTO.getUsernameOrEmail());
-
 		User user = userRepository.findByUsername(loginDTO.getUsernameOrEmail());
 
 		if (user == null) {
@@ -64,9 +64,10 @@ public class LoginService {
 
 			UserDetails details = userDetailsService.loadUserByUsername(user.getUsername());
 			
+			String roles = user.getRoles().get(0).getName();
 			UserDTO userDTO = new UserDTO(user);
-
-			return new ResponderHendlerDTO(200, "login", tokenUtils.generateToken(details), userDTO);
+			
+			return new ResponderHendlerDTO(200, "login", tokenUtils.generateToken(details), userDTO, roles);
 		} catch (Exception e) {
 			// TODO: handle exception
 			return new ResponderHendlerDTO(e, "userNotFound", 404);
