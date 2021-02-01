@@ -12,8 +12,16 @@
     </div>
 
     <div class="container2" *ngIf="!user.isWriter">
-        <div class="container3-notregistration">
-            <h4>Molimo vas unesite minimum dva fajla kako bi mogli u potpunosti registrovati Vas profil.</h4>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3 style="text-align: center;">Molimo vas unesite minimum dva fajla, kako bi smo mogli u potpunosti da verifikujemo vas nalog. Hvala uzivajte.</h3>
+                </div>
+                <br>
+                <div class="col-sm-12" *ngIf="formsFiles.formFields !== null">
+                    <app-file-form [formFields]="formsFiles.formFields"></app-file-form>
+                </div>
+            </div>
         </div>
     </div>
 </div>

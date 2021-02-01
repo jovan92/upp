@@ -3,6 +3,7 @@ import { RegistrationWriterService } from 'src/app/services/registration-writer.
 import { Login } from 'src/app/model/login';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RegistrationService } from 'src/app/services/registration.service';
+import { Global } from 'src/app/global/global';
 
 @Component({
   selector: 'app-registration-writer',
@@ -21,7 +22,8 @@ export class RegistrationWriterComponent implements OnInit {
   constructor(
     private registration : RegistrationWriterService, 
     private router: Router,
-    private registrationService: RegistrationService
+    private registrationService: RegistrationService,
+    private global: Global
     ) { 
     this.registrationForms = new Login();
     this.isSpiner = false;
@@ -36,30 +38,12 @@ export class RegistrationWriterComponent implements OnInit {
   _getForms() {
     this.registration.getForms()
       .subscribe(res => {
+        console.log(res);
         this.registrationForms.processInstanceId = res['processInstanceId'];
         this.registrationForms.taskId = res['taskId']
-        this.registrationForms.formFields = res['formFields']
-        this._parserForms();
+        this.registrationForms.formFields = this.global._parserForms(res['formFields']);
         console.log(this.registrationForms.formFields)
       })
-  }
-
-  _parserForms() {
-    this.registrationForms.formFields.map((field) => {
-      if (field.typeName === 'multipleEnum_genres') {
-        let test: string = field.type.values.all;
-        field.type.values = JSON.parse(test);
-      }
-      if (field.typeName === 'boolean') {
-        field.type['values'] = [];
-        let test = JSON.stringify(field.properties);
-        let test1 = test.split('{')[1];
-        let testYES = test1.split('}')[0].split(',')[0].split(':');
-        field.type['values'].push({id: JSON.parse(testYES[0]), type: JSON.parse(JSON.parse(testYES[1]))})
-        let testNO = test1.split('}')[0].split(',')[1].split(':');
-        field.type['values'].push({id: JSON.parse(testNO[0]), type: JSON.parse(JSON.parse(testNO[1]))})
-      }
-    })
   }
 
   ngRegistration() {
@@ -85,7 +69,6 @@ export class RegistrationWriterComponent implements OnInit {
             this.registrationForms.formFields.push(element);
           });
           console.log(this.registrationForms.formFields)
-          this._parserForms();
         }
         if (res === true) {
           window.alert('Uspjesno ste sacuvali')

@@ -1,5 +1,6 @@
 package com.example.app.controllers;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -12,10 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.app.dtos.FormSubmissionDto;
-import com.example.app.dtos.ResponderHendlerDTO;
-import com.example.app.dtos.TokenDTO;
 import com.example.app.services.HelperService;
 import com.example.app.services.UserWriterRegistrationService;
 
@@ -48,6 +49,18 @@ public class RegistrationWriterController {
 	}
 	
 	/**
+	 * @return All input type
+	 */
+	@RequestMapping(value = "/fileForms/{taksId}", method = RequestMethod.GET)
+	public ResponseEntity<Object> getFileForms(@PathVariable String taksId) {
+		logger.info("Start creating files forms.");
+
+		Object response = helperService.getFileForms(procesName, taksId);
+		logger.info("Finished create files forms.");
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	/**
 	 * 
 	 * @param formSubmissionDto
 	 * @param procesId
@@ -59,17 +72,6 @@ public class RegistrationWriterController {
 		logger.info("Start save new user in db");
 		
 		Object response = helperService.save(procesName, procesId, formSubmissionDto);
-		logger.info("Finished save new user in db");
-		return new ResponseEntity<>(response, HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "/saveFiles/{procesId}", method = RequestMethod.POST)
-	public ResponseEntity<Object> save(@PathVariable String procesId) {
-		logger.info("Start save files in folder.");
-		
-		// TODO Logika skidanja bajt koda koji nosi informaciju o fajlovima
-		// TODO Logika parsiranja bajta i slanja dalje
-		Object response = userWriterRegistrationService.saveFiles(); // prosljedjujemo taj bajt kod 
 		logger.info("Finished save new user in db");
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}

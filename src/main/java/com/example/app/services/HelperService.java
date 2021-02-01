@@ -128,4 +128,18 @@ public class HelperService {
 
 		return map;
 	}
+
+	public Object getFileForms(String procesName, String taksId) {
+		// TODO Auto-generated method stub
+
+		// TODO Napraviti try 
+		Task task = taskService.createTaskQuery().processInstanceId(taksId).list().get(0);
+		TaskFormData tfd = formService.getTaskFormData(task.getId());
+		List<FormField> properties = tfd.getFormFields();
+		
+		FormFieldsDto formFieldsDto = new FormFieldsDto(task.getId(), procesName, properties);
+
+		ResponderHendlerDTO respons = new ResponderHendlerDTO(200, formFieldsDto);
+		return respons;
+	}
 }

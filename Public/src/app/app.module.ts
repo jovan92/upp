@@ -18,6 +18,7 @@ import { MeniComponent } from './components/auth-user/meni/meni.component';
 
 
 import { HttpErrorInterceptorInterceptor } from './hendler/http-error-interceptor.interceptor';
+import { FileFormComponent } from './components/auth-user/file-form/file-form.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { HttpErrorInterceptorInterceptor } from './hendler/http-error-intercepto
     UserHomeComponent,
     HeaderComponent,
     MeniComponent,
+    FileFormComponent,
   ],
   imports: [
     BrowserModule,

@@ -8,8 +8,10 @@ import { map, catchError } from 'rxjs/operators';
 export class RegistrationWriterService {
 
   host: String;
+  taskId: any;
   constructor(private http : HttpClient) {
     this.host = 'http://localhost:8080/api/';
+    this.taskId = JSON.parse(localStorage.getItem('userConfiguration'))['processInstanceId'];
   }
 
   getForms() {
@@ -17,6 +19,12 @@ export class RegistrationWriterService {
       .pipe(map(res => {
         console.log(res)
         if (res['status'] === 200) {
+
+          const uc = {
+            processInstanceId: res['formFieldsDto']['processInstanceId'],
+            taskId: res['formFieldsDto']['taskId']
+          }
+          localStorage.setItem('userConfiguration', JSON.stringify(uc));
           return res['formFieldsDto'];
         } else {
           console.error(res['status']);
@@ -25,11 +33,15 @@ export class RegistrationWriterService {
       }))
   }
 
-  getFormsFile() {
-    return this.http.get(this.host + 'registrationWriter/fileForms')
+  getFormsFile(taskId: String) {
+    return this.http.get(this.host + 'registrationWriter/fileForms/' + taskId)
       .pipe(map(res => {
-        console.log(res);
-        return res;
+        if (res['status'] === 200) {
+          return res['formFieldsDto'];
+        } else {
+          console.error(res['status']);
+          return null;
+        }
       }))
   }
 
@@ -52,5 +64,20 @@ export class RegistrationWriterService {
 
   handleError(error) {
 
+  }
+
+  uploadFile(file: any, user: any) {
+    
+    return this.http.post(this.host + 'files/' + this.taskId + '/' + user.username, file, { observe: 'response' })
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+
+  saveUpload() {
+    return this.http.put(this.host + 'registrationWriter/' + this.taskId, {})
+      .pipe(map(res => {
+        return res;
+      }))
   }
 }
