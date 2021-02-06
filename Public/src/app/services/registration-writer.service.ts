@@ -8,10 +8,8 @@ import { map, catchError } from 'rxjs/operators';
 export class RegistrationWriterService {
 
   host: String;
-  taskId: any;
   constructor(private http : HttpClient) {
     this.host = 'http://localhost:8080/api/';
-    this.taskId = JSON.parse(localStorage.getItem('userConfiguration'))['processInstanceId'];
   }
 
   getForms() {
@@ -66,16 +64,9 @@ export class RegistrationWriterService {
 
   }
 
-  uploadFile(file: any, user: any) {
-    
-    return this.http.post(this.host + 'files/' + this.taskId + '/' + user.username, file, { observe: 'response' })
-      .pipe(map(res => {
-        return res;
-      }))
-  }
-
   saveUpload() {
-    return this.http.put(this.host + 'registrationWriter/' + this.taskId, {})
+    const taskId = JSON.parse(localStorage.getItem('userConfiguration'))['processInstanceId'];
+    return this.http.put(this.host + 'registrationWriter/' + taskId, {})
       .pipe(map(res => {
         return res;
       }))

@@ -1,5 +1,6 @@
-package com.example.app.services;
+package com.example.app.camunda.services;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.app.models.Roles;
 import com.example.app.repositories.RoleRepository;
+import com.example.app.services.UserServiceImpl;
 
 @Service
 public class UserService implements JavaDelegate {
@@ -60,13 +62,15 @@ public class UserService implements JavaDelegate {
 		
 		logger.info("Role is " + getRole);
 		
-		List<Roles> role = roleRepository.findByName(getRole);
-
+		Roles role = roleRepository.findByName(getRole);
+		List<Roles> roles = new ArrayList<Roles>();
+		roles.add(role);
+		
 		String token = UUID.randomUUID().toString();
 
 		com.example.app.models.User newUser = new com.example.app.models.User(userForms.get("firstName").toString(),
 				userForms.get("lastName").toString(), userForms.get("username").toString(),
-				encoder.encode(userForms.get("password").toString()), isBeta, role, userForms.get("email").toString(), token);
+				encoder.encode(userForms.get("password").toString()), isBeta, roles, userForms.get("email").toString(), token);
 
 		logger.info(newUser);
 

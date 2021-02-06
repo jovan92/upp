@@ -1,8 +1,11 @@
 package com.example.app.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.app.models.Roles;
 import com.example.app.models.User;
 import com.example.app.repositories.UserRepository;
 
@@ -45,5 +48,14 @@ public class UserServiceImpl {
 		
 		userRepository.delete(user);
 		return user;
+	}
+
+	public User findByUsername(String username) {
+		// TODO Auto-generated method stub
+		return userRepository.findByUsername(username);
+	}
+	
+	public List<User> findByRoles(Roles roles) {
+		return userRepository.findByRoles(roles);
 	}
 }

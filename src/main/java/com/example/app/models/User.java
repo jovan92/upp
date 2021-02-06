@@ -1,13 +1,34 @@
 package com.example.app.models;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
-@SuppressWarnings("serial")
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
 @Entity
-public class User {
+@NoArgsConstructor
+@AllArgsConstructor
+public class User implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,6 +51,18 @@ public class User {
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 	private List<Roles> roles = new ArrayList<Roles>();
 
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	private List<Files> files;
+	
+	@OneToOne(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL)
+	private CheckRequest checkRequest;
+	
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	private List<Votes> votes;
+	
+	@ManyToMany(mappedBy = "commision", cascade=CascadeType.MERGE)
+	private List<CheckRequest> commision;
+
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -43,6 +76,20 @@ public class User {
 		this.username = username;
 		this.password = password;
 		this.isBeta = isBeta;
+		this.roles = roles;
+		this.email = email;
+		this.hashCode = hashCode;
+	}
+	
+	public User(String firstName, String lastName, String username, String password, Boolean isBeta, Boolean isActive, List<Roles> roles,
+			String email, String hashCode) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.username = username;
+		this.password = password;
+		this.isBeta = isBeta;
+		this.isAcive = isActive;
 		this.roles = roles;
 		this.email = email;
 		this.hashCode = hashCode;
@@ -136,10 +183,48 @@ public class User {
 		this.isWriter = isWriter;
 	}
 
+	public List<Files> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<Files> files) {
+		this.files = files;
+	}
+
 	@Override
 	public String toString() {
 		return "User [firstName=" + firstName + ", lastName=" + lastName + ", username=" + username + ", email=" + email
 				+ ", isBeta=" + isBeta + ", isAcive=" + isAcive + "]";
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

@@ -24,7 +24,7 @@
     <bpmn:sequenceFlow id="Flow_085vyfo" name="NO" sourceRef="Gateway_0rs72a4" targetRef="Activity_1mx11f2">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isValid==false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="Activity_1wek823" name="Send activation link" camunda:class="com.example.app.services.MailService">
+    <bpmn:serviceTask id="Activity_1wek823" name="Send activation link" camunda:class="com.example.app.camunda.services.MailService">
       <bpmn:incoming>Flow_12tnqqo</bpmn:incoming>
       <bpmn:outgoing>Flow_1qbfuxs</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -32,7 +32,7 @@
     <bpmn:sequenceFlow id="Flow_12tnqqo" name="YES" sourceRef="Gateway_0rs72a4" targetRef="Activity_1wek823">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isValid==true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="Activity_0c40fna" name="Add files" camunda:assignee="${username}">
+    <bpmn:userTask id="Activity_0c40fna" name="Add files">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="files_2_10" label="Unesite najmanje dva fajla" type="string">
@@ -47,17 +47,15 @@
             <camunda:list />
           </camunda:outputParameter>
         </camunda:inputOutput>
+        <camunda:taskListener class="com.example.app.handlers.GetFilesHandler" event="create" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0thwcwt</bpmn:incoming>
       <bpmn:incoming>Flow_1gmr1cy</bpmn:incoming>
-      <bpmn:outgoing>Flow_18dhdcy</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1teiq96</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_0x0odg1" sourceRef="Activity_0a57bqo" targetRef="Activity_0fdcgoc" />
     <bpmn:subProcess id="Activity_0qlsd5d" name="Review writer request">
       <bpmn:incoming>Flow_0i7426c</bpmn:incoming>
-      <bpmn:multiInstanceLoopCharacteristics>
-        <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">3</bpmn:loopCardinality>
-      </bpmn:multiInstanceLoopCharacteristics>
+      <bpmn:multiInstanceLoopCharacteristics camunda:collection="${requestRevision}" camunda:elementVariable="revision" />
       <bpmn:sequenceFlow id="Flow_1ruls7q" name="All approved" sourceRef="Gateway_1wjcdgs" targetRef="Event_0kva855">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${typeVote==1}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
@@ -69,7 +67,7 @@
         <bpmn:outgoing>Flow_0b3g1k1</bpmn:outgoing>
         <bpmn:outgoing>Flow_06y4hyg</bpmn:outgoing>
       </bpmn:exclusiveGateway>
-      <bpmn:userTask id="Activity_0i51d91" name="Review works" camunda:assignee="${boardMember}" camunda:candidateUsers="boardMember">
+      <bpmn:userTask id="Activity_0i51d91" name="Review works">
         <bpmn:extensionElements>
           <camunda:formData>
             <camunda:formField id="vote" label="Ocena" type="enum" defaultValue="no">
@@ -80,12 +78,10 @@
             <camunda:formField id="comments" label="Ostavite komentar" type="string" />
             <camunda:formField id="files" type="multipleEnum_genres" defaultValue="Svi fajlovi" />
           </camunda:formData>
-          <camunda:taskListener class="com.example.app.handlers.GetFilesHandler" event="create" />
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_1o252dc</bpmn:incoming>
         <bpmn:incoming>Flow_1fejtdq</bpmn:incoming>
         <bpmn:outgoing>Flow_14phpum</bpmn:outgoing>
-        <bpmn:multiInstanceLoopCharacteristics camunda:collection="boardMembers" />
       </bpmn:userTask>
       <bpmn:startEvent id="Event_13yr3tj" name="Start review">
         <bpmn:outgoing>Flow_1o252dc</bpmn:outgoing>
@@ -96,12 +92,12 @@
       <bpmn:sequenceFlow id="Flow_06y4hyg" sourceRef="Gateway_1wjcdgs" targetRef="Gateway_0bc2xji">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${typeVote==2}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
-      <bpmn:serviceTask id="Activity_1qfy165" name="Send more works notification" camunda:class="com.example.app.services.MailService">
+      <bpmn:serviceTask id="Activity_1qfy165" name="Send more works notification" camunda:class="com.example.app.camunda.services.MailService">
         <bpmn:incoming>Flow_1snnd88</bpmn:incoming>
         <bpmn:outgoing>Flow_1of5lu8</bpmn:outgoing>
       </bpmn:serviceTask>
       <bpmn:sequenceFlow id="Flow_1hte1eb" sourceRef="Activity_0xq4rp7" targetRef="Event_1kzhmqj" />
-      <bpmn:serviceTask id="Activity_0xq4rp7" name="Send reject notification" camunda:class="com.example.app.services.MailService">
+      <bpmn:serviceTask id="Activity_0xq4rp7" name="Send reject notification" camunda:class="com.example.app.camunda.services.MailService">
         <bpmn:incoming>Flow_0b3g1k1</bpmn:incoming>
         <bpmn:outgoing>Flow_1hte1eb</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -117,7 +113,7 @@
         <bpmn:outgoing>Flow_1oavqjv</bpmn:outgoing>
       </bpmn:userTask>
       <bpmn:sequenceFlow id="Flow_0bx4pm1" sourceRef="Activity_1ewjxw8" targetRef="Event_0m7h54q" />
-      <bpmn:serviceTask id="Activity_1ewjxw8" name="Send expired notification" camunda:class="com.example.app.services.MailService">
+      <bpmn:serviceTask id="Activity_1ewjxw8" name="Send expired notification" camunda:class="com.example.app.camunda.services.MailService">
         <bpmn:incoming>Flow_0wfj038</bpmn:incoming>
         <bpmn:outgoing>Flow_0bx4pm1</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -154,11 +150,11 @@
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_1fejtdq" sourceRef="Activity_1xqyd3w" targetRef="Activity_0i51d91" />
       <bpmn:sequenceFlow id="Flow_1udjk2e" sourceRef="Activity_0dsttxc" targetRef="Gateway_1wjcdgs" />
-      <bpmn:serviceTask id="Activity_0dsttxc" name="Check Votes" camunda:class="com.example.app.services.CheckVotesService">
+      <bpmn:serviceTask id="Activity_0dsttxc" name="Check Votes" camunda:class="com.example.app.camunda.services.CheckVotesService">
         <bpmn:incoming>Flow_14phpum</bpmn:incoming>
         <bpmn:outgoing>Flow_1udjk2e</bpmn:outgoing>
       </bpmn:serviceTask>
-      <bpmn:serviceTask id="Activity_1xqyd3w" name="Send notification" camunda:class="com.example.app.services.SocketIO">
+      <bpmn:serviceTask id="Activity_1xqyd3w" name="Send notification" camunda:class="com.example.app.camunda.services.SocketIO">
         <bpmn:incoming>Flow_1oavqjv</bpmn:incoming>
         <bpmn:outgoing>Flow_1fejtdq</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -172,12 +168,12 @@
       </bpmn:task>
     </bpmn:subProcess>
     <bpmn:sequenceFlow id="Flow_0773is1" sourceRef="Event_15tv1zj" targetRef="Activity_1bx95d9" />
-    <bpmn:serviceTask id="Activity_1bx95d9" name="Send accept notification" camunda:class="com.example.app.services.MailService">
+    <bpmn:serviceTask id="Activity_1bx95d9" name="Send accept notification" camunda:class="com.example.app.camunda.services.MailService">
       <bpmn:incoming>Flow_0773is1</bpmn:incoming>
       <bpmn:outgoing>Flow_0y00700</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_0y00700" sourceRef="Activity_1bx95d9" targetRef="Activity_12vubtp" />
-    <bpmn:serviceTask id="Activity_1trusku" name="Send payment expired notification" camunda:class="com.example.app.services.MailService">
+    <bpmn:serviceTask id="Activity_1trusku" name="Send payment expired notification" camunda:class="com.example.app.camunda.services.MailService">
       <bpmn:incoming>Flow_0ati0fa</bpmn:incoming>
       <bpmn:outgoing>Flow_1gtatf4</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -192,12 +188,12 @@
       <bpmn:escalationEventDefinition id="EscalationEventDefinition_1iz4f3d" escalationRef="Escalation_047ed6r" camunda:escalationCodeVariable="VoteNo" />
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_06n5wkk" sourceRef="Event_0fj339w" targetRef="Event_0ummg97" />
-    <bpmn:serviceTask id="Activity_0s8jila" name="Save new User" camunda:class="com.example.app.services.UserService">
+    <bpmn:serviceTask id="Activity_0s8jila" name="Save new User" camunda:class="com.example.app.camunda.services.UserService">
       <bpmn:incoming>Flow_1kkkwrv</bpmn:incoming>
       <bpmn:outgoing>Flow_08zrlx3</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_08zrlx3" sourceRef="Activity_0s8jila" targetRef="Gateway_0rs72a4" />
-    <bpmn:serviceTask id="Activity_1mx11f2" name="Send notification" camunda:class="com.example.app.services.SocketIO">
+    <bpmn:serviceTask id="Activity_1mx11f2" name="Send notification" camunda:class="com.example.app.camunda.services.SocketIO">
       <bpmn:incoming>Flow_085vyfo</bpmn:incoming>
       <bpmn:outgoing>Flow_0qeufkn</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -257,7 +253,7 @@
       <bpmn:outgoing>Flow_0x0odg1</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_1k9vwwy" sourceRef="Activity_0fdcgoc" targetRef="Gateway_1k6ingu" />
-    <bpmn:serviceTask id="Activity_0fdcgoc" name="Check Token Service" camunda:class="com.example.app.services.CheckTokenService">
+    <bpmn:serviceTask id="Activity_0fdcgoc" name="Check Token Service" camunda:class="com.example.app.camunda.services.CheckTokenService">
       <bpmn:incoming>Flow_0x0odg1</bpmn:incoming>
       <bpmn:outgoing>Flow_1k9vwwy</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -272,25 +268,13 @@
     <bpmn:sequenceFlow id="Flow_0e7pdsx" name="NO" sourceRef="Gateway_1k6ingu" targetRef="Activity_0a57bqo">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isValidToken == false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:exclusiveGateway id="Gateway_1je6b57" name="Is Two Files">
-      <bpmn:incoming>Flow_18dhdcy</bpmn:incoming>
-      <bpmn:outgoing>Flow_0thwcwt</bpmn:outgoing>
-      <bpmn:outgoing>Flow_1g7lzdl</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_18dhdcy" sourceRef="Activity_0c40fna" targetRef="Gateway_1je6b57" />
-    <bpmn:sequenceFlow id="Flow_0thwcwt" name="NO" sourceRef="Gateway_1je6b57" targetRef="Activity_0c40fna">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isTwoFile == false}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1g7lzdl" name="YES" sourceRef="Gateway_1je6b57" targetRef="Activity_1yol316">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isTwoFile == true}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1d2h5lz" sourceRef="Activity_1yol316" targetRef="Activity_1n9v5ux" />
-    <bpmn:serviceTask id="Activity_1yol316" name="Save files" camunda:class="com.example.app.services.SaveFilesService">
-      <bpmn:incoming>Flow_1g7lzdl</bpmn:incoming>
+    <bpmn:serviceTask id="Activity_1yol316" name="Commit files" camunda:class="com.example.app.camunda.services.SaveFilesService">
+      <bpmn:incoming>Flow_1teiq96</bpmn:incoming>
       <bpmn:outgoing>Flow_1d2h5lz</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_0i7426c" sourceRef="Activity_1n9v5ux" targetRef="Activity_0qlsd5d" />
-    <bpmn:serviceTask id="Activity_1n9v5ux" name="Send registration request" camunda:class="com.example.app.services.MailService">
+    <bpmn:serviceTask id="Activity_1n9v5ux" name="Send review" camunda:class="com.example.app.camunda.services.CheckRequestService">
       <bpmn:incoming>Flow_1d2h5lz</bpmn:incoming>
       <bpmn:outgoing>Flow_0i7426c</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -328,12 +312,12 @@
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_0ati0fa" sourceRef="Event_1on8l3t" targetRef="Activity_1trusku" />
-    <bpmn:serviceTask id="Activity_013aoi7" name="Pay membership" camunda:class="com.example.app.services.PayService">
+    <bpmn:serviceTask id="Activity_013aoi7" name="Pay membership" camunda:class="com.example.app.camunda.services.PayService">
       <bpmn:incoming>Flow_1aj6g6v</bpmn:incoming>
       <bpmn:outgoing>Flow_17lwal2</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_1t7p180" sourceRef="Event_0v3p6ic" targetRef="Activity_1a4gnf2" />
-    <bpmn:serviceTask id="Activity_1a4gnf2" name="Notify expiration time" camunda:class="com.example.app.services.TimeOutService">
+    <bpmn:serviceTask id="Activity_1a4gnf2" name="Notify expiration time" camunda:class="com.example.app.camunda.services.TimeOutService">
       <bpmn:incoming>Flow_1t7p180</bpmn:incoming>
       <bpmn:outgoing>Flow_19u2gnb</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -348,6 +332,7 @@
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1M</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_1teiq96" sourceRef="Activity_0c40fna" targetRef="Activity_1yol316" />
   </bpmn:process>
   <bpmn:message id="Message_0zjw586" name="UserVerification" />
   <bpmn:escalation id="Escalation_12hdliu" name="VoteYes" escalationCode="yes" />
@@ -356,6 +341,10 @@
   <bpmn:escalation id="Escalation_0lgqik5" name="VoteNo" escalationCode="no" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_Create_Writer">
+      <bpmndi:BPMNEdge id="Flow_1teiq96_di" bpmnElement="Flow_1teiq96">
+        <di:waypoint x="1550" y="178" />
+        <di:waypoint x="1700" y="178" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_19u2gnb_di" bpmnElement="Flow_19u2gnb">
         <di:waypoint x="1058" y="330" />
         <di:waypoint x="1120" y="330" />
@@ -381,28 +370,8 @@
         <di:waypoint x="1318" y="645" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1d2h5lz_di" bpmnElement="Flow_1d2h5lz">
-        <di:waypoint x="1750" y="444" />
+        <di:waypoint x="1750" y="218" />
         <di:waypoint x="1750" y="590" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1g7lzdl_di" bpmnElement="Flow_1g7lzdl">
-        <di:waypoint x="1750" y="203" />
-        <di:waypoint x="1750" y="364" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1757" y="243" width="22" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0thwcwt_di" bpmnElement="Flow_0thwcwt">
-        <di:waypoint x="1750" y="153" />
-        <di:waypoint x="1750" y="90" />
-        <di:waypoint x="1623" y="90" />
-        <di:waypoint x="1623" y="138" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1697" y="72" width="17" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_18dhdcy_di" bpmnElement="Flow_18dhdcy">
-        <di:waypoint x="1673" y="178" />
-        <di:waypoint x="1725" y="178" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0e7pdsx_di" bpmnElement="Flow_0e7pdsx">
         <di:waypoint x="1335" y="153" />
@@ -415,9 +384,9 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1gmr1cy_di" bpmnElement="Flow_1gmr1cy">
         <di:waypoint x="1360" y="178" />
-        <di:waypoint x="1573" y="178" />
+        <di:waypoint x="1450" y="178" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1382" y="160" width="22" height="14" />
+          <dc:Bounds x="1363" y="160" width="22" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1k9vwwy_di" bpmnElement="Flow_1k9vwwy">
@@ -496,7 +465,7 @@
         <dc:Bounds x="750" y="138" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0c40fna_di" bpmnElement="Activity_0c40fna">
-        <dc:Bounds x="1573" y="138" width="100" height="80" />
+        <dc:Bounds x="1450" y="138" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1f5sdz4_di" bpmnElement="Activity_0qlsd5d" isExpanded="true">
         <dc:Bounds x="198" y="410" width="1120" height="470" />
@@ -687,14 +656,8 @@
           <dc:Bounds x="1297" y="210" width="76" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1je6b57_di" bpmnElement="Gateway_1je6b57" isMarkerVisible="true">
-        <dc:Bounds x="1725" y="153" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1770" y="160" width="59" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0mlm8d1_di" bpmnElement="Activity_1yol316">
-        <dc:Bounds x="1700" y="364" width="100" height="80" />
+        <dc:Bounds x="1700" y="138" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0meljk3_di" bpmnElement="Activity_1n9v5ux">
         <dc:Bounds x="1700" y="590" width="100" height="80" />

@@ -1,5 +1,7 @@
 package com.example.app.dtos;
 
+import java.util.List;
+
 public class ResponderHendlerDTO {
 
 	private Exception e;
@@ -7,6 +9,7 @@ public class ResponderHendlerDTO {
 	private int status;
 	private FormFieldsDto formFieldsDto;
 	private LoginResponseDTO loginResponseDTO;
+	private List<FilesDTO> filesDTOs;
 
 	public ResponderHendlerDTO() {
 		super();
@@ -43,6 +46,7 @@ public class ResponderHendlerDTO {
 
 	/**
 	 * Create login response
+	 * 
 	 * @param status
 	 * @param type
 	 * @param jwt
@@ -61,6 +65,13 @@ public class ResponderHendlerDTO {
 		this.status = status;
 		this.type = type;
 		this.loginResponseDTO = new LoginResponseDTO(jwt, userDTO, roles);
+	}
+
+	public ResponderHendlerDTO(int status, String type, List<FilesDTO> filesDTOs) {
+		// TODO Auto-generated constructor stub
+		this.status = status;
+		this.type = type;
+		this.filesDTOs = filesDTOs;
 	}
 
 	public Exception getE() {
@@ -101,6 +112,14 @@ public class ResponderHendlerDTO {
 
 	public void setLoginResponseDTO(LoginResponseDTO loginResponseDTO) {
 		this.loginResponseDTO = loginResponseDTO;
+	}
+
+	public List<FilesDTO> getFilesDTOs() {
+		return filesDTOs;
+	}
+
+	public void setFilesDTOs(List<FilesDTO> filesDTOs) {
+		this.filesDTOs = filesDTOs;
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.example.app.services;
+package com.example.app.camunda.services;
 
 import java.util.HashMap;
 
@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.app.models.User;
+import com.example.app.services.UserServiceImpl;
 
 @Service
 public class CheckTokenService implements JavaDelegate {

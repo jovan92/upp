@@ -1,34 +1,26 @@
-<!-- <form>
-    <div class="form-group" *ngFor="let item of formFields; let i = index" style="border-bottom: 1px solid #ccc; float: left; width: 100%; height: 50px;">
-        <div class="box">
-            <input
-            type="file"
-            name="filesp"
-            id="filesp"
-            (change)="onSelectImgForHeader($event)"
-            class="inputfile inputfile-4"
-            data-multiple-caption="{count} filesp selected"
-            multiple/> <button type="submit" style="float: right;" class="btn btn-danger"(click)="ngRemove(item)">X</button>
-        </div>
-       
-    </div>
-    <p class="danger" *ngIf="minFile">Morate imati vise od 2 fajla</p>
-    <p class="worning" *ngIf="maxFile">Maksimalan broj fajlova je 10</p>
-    <button type="submit" class="btn btn-primary margin-top float-right w-25"(click)="ngSave()">Sacuvajte fajl</button><button type="submit" class="btn btn-success margin-top float-right w-25" (click)="ngAddForm()">Dodajte jos jedan</button>
-    
-</form> -->
+
 <div style="border-bottom: 1px solid #ccc; margin-bottom: 50px;"></div>
 <div class="container row">
-    <div class="col-md-12" *ngFor="let item of countFile" style="border-bottom:1px solid #ccc; height: 50px; margin-bottom: 5px;">
-        <input type="file" (change)="onFileChanged($event)"><button type="submit" style="float: right;" class="btn btn-danger"(click)="ngRemove(item)">X</button>
+    <div class="col-md-12" *ngFor="let item of countFile; let i = index" style="border-bottom:1px solid #ccc; height: 50px; margin-bottom: 5px;">
+        <div *ngIf="item !== null">
+            <img src="../../../../assets/pdf.png" style="width: 40px; height: 40px;">{{' ' + item.name}}<button type="submit" style="float: right;" class="btn btn-danger"(click)="ngRemove(item, i)">X</button>
+        </div>
     </div>
+    <div class="col-md-12" style="border-bottom:1px solid #ccc; height: 50px; margin-bottom: 5px;">
+        <input type="file" (change)="onFileChanged($event)">
+    </div>
+
+    
+
     <div class="col-md-12">
         <div class="spiner-center" *ngIf="isSpiner">
             <div class="spinner-border text-success"></div> 
         </div> 
         <p class="danger" *ngIf="minFile">Morate imati vise od 2 fajla</p>
         <p class="worning" *ngIf="maxFile">Maksimalan broj fajlova je 10</p>
+
+        <button type="submit" class="btn btn-primary margin-top float-right w-25" (click)="ngSave()">Komitujte fajlove</button>
     </div>
-    <button type="submit" class="btn btn-primary margin-top float-right w-25" (click)="ngSave()">Sacuvajte fajl</button>
+    
     
 </div>

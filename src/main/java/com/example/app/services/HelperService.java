@@ -13,7 +13,6 @@ import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
-import org.camunda.bpm.engine.runtime.MessageCorrelationResult;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +39,9 @@ public class HelperService {
 
 	@Autowired
 	FormService formService;
+	
+	@Autowired
+	FilesService fileService;
 	
 	DelegateExecution execution;
 
@@ -141,5 +143,43 @@ public class HelperService {
 
 		ResponderHendlerDTO respons = new ResponderHendlerDTO(200, formFieldsDto);
 		return respons;
+	}
+
+	public Object commit(String procesId, String username) {
+		// TODO Auto-generated method stub
+		Task nextTask;
+		TaskFormData tfd = null;
+		if (taskService.createTaskQuery().processInstanceId(procesId).list().size() != 0) {
+			logger.info("Start create new User Task.");
+
+			nextTask = taskService.createTaskQuery().processInstanceId(procesId).list().get(0);
+			tfd = formService.getTaskFormData(nextTask.getId());
+
+			List<FormField> properties = tfd.getFormFields();
+//
+
+			FormSubmissionDto fsd = new FormSubmissionDto();
+			fsd.setFieldId("username");
+			fsd.setFieldValue(username);
+
+			List<FormSubmissionDto> fssd = new ArrayList<FormSubmissionDto>();
+			fssd.add(fsd);
+
+			HashMap<String, Object> map = this.mapListToDTO(fssd);
+			Task task = taskService.createTaskQuery().taskId(nextTask.getId()).singleResult();
+			String processInstanceId = task.getProcessInstanceId();
+			runtimeService.setVariable(processInstanceId, "review", map);
+			formService.submitTaskForm(nextTask.getId(), map);
+			
+//			
+			logger.info("Finished create new User Task.");
+		}
+		return null;
+	}
+
+	public Object delete(String procesId, Long fileId) {
+		// TODO Auto-generated method stub
+		fileService.deleteFile(fileId);
+		return new ResponderHendlerDTO(200, "success");
 	}
 }

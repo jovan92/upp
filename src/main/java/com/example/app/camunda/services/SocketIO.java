@@ -1,24 +1,17 @@
-package com.example.app.services;
+package com.example.app.camunda.services;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.springframework.stereotype.Service;
 
-public class SaveFilesService implements JavaDelegate {
-
-	Logger logger = LogManager.getLogger(SaveFilesService.class);
+@Service
+public class SocketIO implements JavaDelegate {
+	Logger logger = LogManager.getLogger(SocketIO.class);
 	
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
-		
-		// TODO poslovna logika
-		
-		
-		
-		
-		execution.setVariable("type", "sendRequest");
-		
-		// TODO call mail method
+		logger.info("Stared SocketIO");
 	}
 }

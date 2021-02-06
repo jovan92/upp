@@ -1,4 +1,4 @@
-package com.example.app.services;
+package com.example.app.camunda.services;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;

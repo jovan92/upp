@@ -1,4 +1,4 @@
-package com.example.app.services;
+package com.example.app.camunda.services;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -6,6 +6,8 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.example.app.services.MailServiceImpl;
 
 @Service
 public class MailService implements JavaDelegate {
